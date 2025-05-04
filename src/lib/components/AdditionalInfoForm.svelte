@@ -7,15 +7,19 @@
 	export let infoDiseases: { label: string; value: string }[][] = [[]];
 	export let infoMedications: { label: string; value: string }[][] = [];
 	export let infoOccupations: { label: string; value: string }[][] = [];
-
+	export let dob: string = '';
+	export let additionalInfoVisited: boolean = false;
 	export let onInfoChange: (infoDiseases: { label: string; value: string }[][]) => void;
 	export let onMedicationChange: (infoMedications: { label: string; value: string }[][]) => void;
 	export let onOccupationChange: (infoOccupations: { label: string; value: string }[][]) => void;
+	export let onAdditionalModalOpen: (additionalInfoVisited: boolean) => void;
 
 	let isModalOpen = false;
 
 	function openModal() {
 		isModalOpen = true;
+		additionalInfoVisited = true;
+		onAdditionalModalOpen(true);
 	}
 
 	function closeModal() {
@@ -50,11 +54,12 @@
 	}
 </script>
 
-<div class="info sm:h-20 md:h-25 lg:h-30">
+<div class="info calendar2 sm:h-20 md:h-25 lg:h-30">
 	<button
-		class="info button2 cursor-pointer flex-col text-white hover:text-black focus:outline-none"
+		class={`info button2 flex-col text-white hover:text-black ${additionalInfoVisited ? 'text-green' : ''}`}
 		on:click={openModal}
 		aria-label="Open additional info"
+		disabled={dob == ''}
 	>
 		<FileText class="h-15 w-15" />
 		<p>Additional Info</p>
@@ -68,7 +73,7 @@
 				<h4 class="text-lg font-bold">Provide Additional Information</h4>
 				<div class="absolute top-0 right-0">
 					<button
-						class=" ml-auto w-auto text-gray-500 hover:text-gray-700"
+						class=" ml-auto w-auto cursor-pointer text-gray-500 hover:text-gray-700"
 						on:click={closeModal}
 						aria-label="Close modal"
 					>
@@ -88,7 +93,7 @@
 						</svg>
 					</button>
 				</div>
-				<div class=" p-4 text-left">
+				<div class=" !p-4 text-left">
 					<div class="!space-y-10">
 						<div class=" bg-gray-200">
 							<label for="diseases" class="cursor-pointer text-lg text-blue-500"
@@ -147,11 +152,11 @@
 					</div>
 				</div>
 				<button
-					class="button2 button3 bottom-0 cursor-pointer bg-blue-500 p-3 hover:bg-blue-600"
+					class="button2 button3 bottom-0 bg-blue-500 p-3 hover:bg-blue-600"
 					on:click={closeModal}>Apply</button
 				>
 				<button
-					class="button2 button3 bottom-0 cursor-pointer bg-blue-500 p-3 hover:bg-blue-600"
+					class="button2 button3 bottom-0 bg-blue-500 p-3 hover:bg-blue-600"
 					on:click={closeModal}>Skip</button
 				>
 			</div>
@@ -162,6 +167,11 @@
 <style>
 	.button2 {
 		width: 7rem;
+		cursor: pointer;
+	}
+	:disabled {
+		color: gray;
+		cursor: not-allowed;
 	}
 	.button3 {
 		border-radius: 10px;
@@ -171,5 +181,14 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.text-green {
+		color: green;
+	}
+	.calendar2 {
+		border: dotted;
+		border-radius: 2rem;
+		border-color: black;
+		margin-left: 1rem;
 	}
 </style>

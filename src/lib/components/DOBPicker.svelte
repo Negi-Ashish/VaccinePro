@@ -3,6 +3,7 @@
 	import { Calendar } from 'lucide-svelte';
 	export let dob: string = '';
 	export let onDOBChange: (date: string) => void;
+	export let selectedGender: 'male' | 'female' | '' = '';
 
 	let showModal = false;
 
@@ -27,12 +28,13 @@
 </svelte:head>
 
 <div
-	class={`calendar rounded-md sm:h-20 md:h-25 lg:h-30  ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
+	class={`calendar calendar2 rounded-md sm:h-20 md:h-25 lg:h-30  ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
 >
 	<button
 		type="button"
 		class="calendar cursor-pointer focus:outline-none"
 		on:click={() => (showModal = true)}
+		disabled={selectedGender == ''}
 	>
 		<Calendar class="h-15 w-15" />
 		<p>DOB</p>
@@ -68,6 +70,16 @@
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
+	}
+	:disabled {
+		color: gray;
+		cursor: not-allowed;
+	}
+	.calendar2 {
+		border: dotted;
+		border-radius: 2rem;
+		border-color: black;
+		margin-left: 1rem;
 	}
 	.selected-text {
 		color: green;

@@ -4,12 +4,14 @@
 	import AdditionalInfoForm from './AdditionalInfoForm.svelte';
 	import AgeDisplay from './AgeDisplay.svelte';
 	import VaccineScheduleTable from './VaccineScheduleTable.svelte';
+	import CalculateVaccines from './CalculateVaccines.svelte';
 
 	let gender: 'male' | 'female' | '' = '';
 	let dob: string = '';
 	let infoDiseases: { label: string; value: string }[][] = [];
 	let infoMedications: { label: string; value: string }[][] = [];
 	let infoOccupations: { label: string; value: string }[][] = [];
+	let additionalInfoVisited: boolean = false;
 	let age: string = '';
 	let schedule = ['birth', '2mon', '4mon', '6mon', '9mon'];
 
@@ -27,6 +29,7 @@
 			<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
 			<DOBPicker
 				{dob}
+				selectedGender={gender}
 				onDOBChange={(d) => {
 					dob = d;
 					calculateAge(d);
@@ -36,9 +39,20 @@
 				{infoDiseases}
 				{infoMedications}
 				{infoOccupations}
+				{dob}
+				{additionalInfoVisited}
 				onInfoChange={(val) => (infoDiseases = val)}
 				onMedicationChange={(val) => (infoMedications = val)}
 				onOccupationChange={(val) => (infoOccupations = val)}
+				onAdditionalModalOpen={(val) => (additionalInfoVisited = val)}
+			/>
+			<CalculateVaccines
+				{infoDiseases}
+				{infoMedications}
+				{infoOccupations}
+				selectedGender={gender}
+				{dob}
+				{additionalInfoVisited}
 			/>
 		</div>
 		<div class="OutputDiv bg-amber-950">

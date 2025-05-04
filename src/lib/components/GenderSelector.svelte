@@ -36,6 +36,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		border: dotted;
+		border-radius: 2rem;
 	}
 	.selected-text {
 		color: green;
