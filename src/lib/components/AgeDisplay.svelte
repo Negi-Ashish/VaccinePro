@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="age-display flex flex-col items-center justify-center bg-amber-400 sm:h-20 md:h-25 lg:h-30"
+	class="age-display flex flex-col items-center justify-center bg-amber-400 p-5 sm:h-20 md:h-25 lg:h-30"
 >
 	<!-- Scalable Image Based on Age & Gender -->
 	<img

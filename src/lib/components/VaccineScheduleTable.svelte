@@ -2,7 +2,7 @@
 	export let schedule: string[] = ['birth', '2mon', '4mon', '6mon', '9mon'];
 </script>
 
-<div class="vaccine-table bg-lime-400">
+<div class="vaccine-table bg-lime-400 p-5 sm:h-20 md:h-25 lg:h-30">
 	<h3>Vaccine description based on provided criteria</h3>
 	<table>
 		<thead>

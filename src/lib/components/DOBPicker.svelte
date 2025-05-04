@@ -1,35 +1,66 @@
 <script lang="ts">
+	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
+	import { Calendar } from 'lucide-svelte';
 	export let dob: string = '';
 	export let onDOBChange: (date: string) => void;
 
-	function handleChange(e: Event) {
-		const target = e.target as HTMLInputElement;
-		onDOBChange?.(target.value);
+	let showInput = false;
+
+	function handleDateChange(selectedDates: Date[]) {
+		if (selectedDates.length > 0) {
+			const date = selectedDates[0];
+			// Format as YYYY-MM-DD in local time
+			const formatted =
+				date.getFullYear() +
+				'-' +
+				String(date.getMonth() + 1).padStart(2, '0') +
+				'-' +
+				String(date.getDate()).padStart(2, '0');
+
+			onDOBChange?.(formatted);
+			showInput = false;
+		}
+	}
+
+	function toggleInput() {
+		showInput = true;
 	}
 </script>
 
-<div class="relative bg-purple-400">
-	<input
-		id="dob"
-		type="date"
-		bind:value={dob}
-		on:input={handleChange}
-		class="absolute inset-0 opacity-0"
-	/>
-	<label for="dob" class="cursor-pointer text-lg text-gray-500">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-			class="h-6 w-6"
+<svelte:head>
+	<link rel="stylesheet" href="https://unpkg.com/carbon-components-svelte/css/white.css" />
+</svelte:head>
+
+<div
+	class="calendar flex items-center justify-center rounded-md bg-purple-400 sm:h-20 md:h-25 lg:h-30"
+>
+	{#if showInput}
+		<DatePicker
+			datePickerType="single"
+			value={dob}
+			flatpickrProps={{
+				locale: { firstDayOfWeek: 1 },
+				defaultDate: dob,
+				dateFormat: 'Y-m-d', // match ISO format
+				onChange: handleDateChange
+			}}
+			class="p-4"
 		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M8 7V3m0 0H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-3m-6 0h6m-6 0V7"
-			/>
-		</svg>
-	</label>
+			<DatePickerInput labelText="Date of Birth" placeholder="mm/dd/yyyy" defaultValue={dob} />
+		</DatePicker>
+	{:else}
+		<button
+			type="button"
+			class="flex cursor-pointer items-center gap-2 border-none bg-transparent text-white"
+			on:click={toggleInput}
+		>
+			<Calendar class="h-10 w-10" />
+		</button>
+	{/if}
 </div>
+
+<style>
+	.calendar {
+		width: 18rem;
+	}
+</style>
