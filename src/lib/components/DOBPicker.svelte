@@ -31,9 +31,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/carbon-components-svelte/css/white.css" />
 </svelte:head>
 
-<div
-	class="calendar flex items-center justify-center rounded-md bg-purple-400 sm:h-20 md:h-25 lg:h-30"
->
+<div class="calendar rounded-md text-white sm:h-20 md:h-25 lg:h-30">
 	{#if showInput}
 		<DatePicker
 			datePickerType="single"
@@ -50,16 +48,21 @@
 	{:else}
 		<button
 			type="button"
-			class="flex cursor-pointer items-center gap-2 border-none bg-transparent text-white"
+			class="calendar cursor-pointer bg-purple-400 hover:bg-purple-500 focus:outline-none"
 			on:click={toggleInput}
 		>
-			<Calendar class="h-10 w-10" />
+			<Calendar class="h-15 w-15" />
 		</button>
 	{/if}
 </div>
 
 <style>
+	button {
+		width: 10rem;
+	}
 	.calendar {
-		padding-inline: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

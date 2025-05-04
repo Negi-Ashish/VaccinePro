@@ -19,7 +19,7 @@
 	}
 </script>
 
-<div class="flex items-center justify-center bg-orange-600 sm:h-48 md:h-64 lg:h-80">
+<div class="flex items-center justify-center bg-gray-800 sm:h-48 md:h-64 lg:h-80">
 	<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
 	<DOBPicker
 		{dob}
