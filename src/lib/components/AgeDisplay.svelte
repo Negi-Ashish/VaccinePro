@@ -23,7 +23,7 @@
 	<img
 		src={getImagePath()}
 		alt="Profile Icon"
-		class="object-contain sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-20"
+		class="object-contain sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-50"
 	/>
 	{#if age == ''}
 		<p>Please Select DOB</p>

@@ -8,23 +8,27 @@
 	}
 </script>
 
-<div class="gender-selector flex items-center justify-center sm:h-20 md:h-25 lg:h-30">
+<div class="gender-selector sm:h-20 md:h-25 lg:h-30">
 	<button
-		class="gender-selector bg-red-400 p-5 text-5xl sm:h-20 md:h-25 lg:h-30"
+		class="flex flex-col p-5 text-5xl hover:bg-green-300"
+		class:bg-green-500={selectedGender === 'male'}
+		class:bg-blue-400={selectedGender !== 'male'}
 		on:click={() => selectGender('male')}
-		aria-label="Select Male">👨</button
-	>
+		id={'male'}
+		aria-label="Select Male"
+		>👨
+	</button>
+
 	<button
-		class="gender-selector bg-blue-400 p-5 text-5xl sm:h-20 md:h-25 lg:h-30"
+		class=" p-5 text-5xl hover:bg-green-300"
+		class:bg-green-500={selectedGender === 'female'}
+		class:bg-red-400={selectedGender !== 'female'}
 		on:click={() => selectGender('female')}
 		aria-label="Select Female">👩</button
 	>
 </div>
 
 <style>
-	button {
-		width: 10rem;
-	}
 	.gender-selector {
 		display: flex;
 		justify-content: center;

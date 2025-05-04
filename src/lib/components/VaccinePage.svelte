@@ -7,7 +7,12 @@
 
 	let gender: 'male' | 'female' | '' = '';
 	let dob: string = '';
-	let info: string[][] = [];
+	let info: { label: string; value: string }[][] = [
+		[
+			{ label: 'Python', value: 'Python' },
+			{ label: 'TypeScript', value: 'TypeScript' }
+		]
+	];
 	let age: string = '';
 	let schedule = ['birth', '2mon', '4mon', '6mon', '9mon'];
 
@@ -19,16 +24,32 @@
 	}
 </script>
 
-<div class="flex items-center justify-center bg-gray-800 sm:h-48 md:h-64 lg:h-80">
-	<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
-	<DOBPicker
-		{dob}
-		onDOBChange={(d) => {
-			dob = d;
-			calculateAge(d);
-		}}
-	/>
-	<AdditionalInfoForm {info} onInfoChange={(val) => (info = val)} />
-	<AgeDisplay {age} {gender} />
-	<VaccineScheduleTable {schedule} />
+<div class="!px-10 !pt-30">
+	<div class="flex justify-between">
+		<div class="InputDiv">
+			<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
+			<DOBPicker
+				{dob}
+				onDOBChange={(d) => {
+					dob = d;
+					calculateAge(d);
+				}}
+			/>
+			<AdditionalInfoForm {info} onInfoChange={(val) => (info = val)} />
+		</div>
+		<div class="OutputDiv bg-amber-950">
+			<AgeDisplay {age} {gender} />
+			<VaccineScheduleTable {schedule} />
+		</div>
+	</div>
 </div>
+
+<style>
+	.InputDiv {
+		display: flex;
+	}
+	.OutputDiv {
+		display: flex;
+		width: 60%;
+	}
+</style>

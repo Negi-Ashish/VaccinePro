@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
+	import { DatePicker, DatePickerInput, Modal } from 'carbon-components-svelte';
 	import { Calendar } from 'lucide-svelte';
 	export let dob: string = '';
 	export let onDOBChange: (date: string) => void;
 
-	let showInput = false;
+	let showModal = false;
 
 	function handleDateChange(selectedDates: Date[]) {
 		if (selectedDates.length > 0) {
 			const date = selectedDates[0];
-			// Format as YYYY-MM-DD in local time
 			const formatted =
 				date.getFullYear() +
 				'-' +
@@ -18,12 +17,8 @@
 				String(date.getDate()).padStart(2, '0');
 
 			onDOBChange?.(formatted);
-			showInput = false;
+			showModal = false;
 		}
-	}
-
-	function toggleInput() {
-		showInput = true;
 	}
 </script>
 
@@ -31,30 +26,36 @@
 	<link rel="stylesheet" href="https://unpkg.com/carbon-components-svelte/css/white.css" />
 </svelte:head>
 
-<div class="calendar rounded-md text-white sm:h-20 md:h-25 lg:h-30">
-	{#if showInput}
-		<DatePicker
-			datePickerType="single"
-			value={dob}
-			flatpickrProps={{
-				locale: { firstDayOfWeek: 1 },
-				defaultDate: dob,
-				dateFormat: 'Y-m-d',
-				onChange: handleDateChange
-			}}
-		>
-			<DatePickerInput labelText="Date of Birth" placeholder="mm/dd/yyyy" defaultValue={dob} />
-		</DatePicker>
-	{:else}
-		<button
-			type="button"
-			class="calendar cursor-pointer bg-purple-400 hover:bg-purple-500 focus:outline-none"
-			on:click={toggleInput}
-		>
-			<Calendar class="h-15 w-15" />
-		</button>
-	{/if}
+<div class="calendar rounded-md text-white hover:text-black sm:h-20 md:h-25 lg:h-30">
+	<button
+		type="button"
+		class="calendar cursor-pointer focus:outline-none"
+		on:click={() => (showModal = true)}
+	>
+		<Calendar class="h-15 w-15" />
+		<p>DOB</p>
+	</button>
 </div>
+
+{#if showModal}
+	<div class="bg-opacity-50 fixed inset-0 flex items-start justify-center bg-gray-800 !pt-30">
+		<div class="rounded-lg shadow-lg">
+			<DatePicker
+				datePickerType="single"
+				value={dob}
+				flatpickrProps={{
+					locale: { firstDayOfWeek: 1 },
+					defaultDate: dob,
+					dateFormat: 'Y-m-d',
+					maxDate: new Date(),
+					onChange: handleDateChange
+				}}
+			>
+				<DatePickerInput labelText="Date of Birth" placeholder="mm/dd/yyyy" defaultValue={dob} />
+			</DatePicker>
+		</div>
+	</div>
+{/if}
 
 <style>
 	button {
@@ -64,5 +65,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
 	}
 </style>
