@@ -25,5 +25,9 @@
 		alt="Profile Icon"
 		class="object-contain sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-20"
 	/>
-	<p>Calculated Age: {age}</p>
+	{#if age == ''}
+		<p>Please Select DOB</p>
+	{:else}
+		<p>Calculated Age: {age}</p>
+	{/if}
 </div>

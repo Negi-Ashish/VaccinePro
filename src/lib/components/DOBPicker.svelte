@@ -41,10 +41,9 @@
 			flatpickrProps={{
 				locale: { firstDayOfWeek: 1 },
 				defaultDate: dob,
-				dateFormat: 'Y-m-d', // match ISO format
+				dateFormat: 'Y-m-d',
 				onChange: handleDateChange
 			}}
-			class="p-4"
 		>
 			<DatePickerInput labelText="Date of Birth" placeholder="mm/dd/yyyy" defaultValue={dob} />
 		</DatePicker>
@@ -61,6 +60,6 @@
 
 <style>
 	.calendar {
-		width: 18rem;
+		padding-inline: 50px;
 	}
 </style>
