@@ -7,12 +7,9 @@
 
 	let gender: 'male' | 'female' | '' = '';
 	let dob: string = '';
-	let info: { label: string; value: string }[][] = [
-		[
-			{ label: 'Python', value: 'Python' },
-			{ label: 'TypeScript', value: 'TypeScript' }
-		]
-	];
+	let infoDiseases: { label: string; value: string }[][] = [];
+	let infoMedications: { label: string; value: string }[][] = [];
+	let infoOccupations: { label: string; value: string }[][] = [];
 	let age: string = '';
 	let schedule = ['birth', '2mon', '4mon', '6mon', '9mon'];
 
@@ -35,7 +32,14 @@
 					calculateAge(d);
 				}}
 			/>
-			<AdditionalInfoForm {info} onInfoChange={(val) => (info = val)} />
+			<AdditionalInfoForm
+				{infoDiseases}
+				{infoMedications}
+				{infoOccupations}
+				onInfoChange={(val) => (infoDiseases = val)}
+				onMedicationChange={(val) => (infoMedications = val)}
+				onOccupationChange={(val) => (infoOccupations = val)}
+			/>
 		</div>
 		<div class="OutputDiv bg-amber-950">
 			<AgeDisplay {age} {gender} />

@@ -26,7 +26,9 @@
 	<link rel="stylesheet" href="https://unpkg.com/carbon-components-svelte/css/white.css" />
 </svelte:head>
 
-<div class="calendar rounded-md text-white hover:text-black sm:h-20 md:h-25 lg:h-30">
+<div
+	class={`calendar rounded-md sm:h-20 md:h-25 lg:h-30  ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
+>
 	<button
 		type="button"
 		class="calendar cursor-pointer focus:outline-none"
@@ -59,12 +61,15 @@
 
 <style>
 	button {
-		width: 10rem;
+		width: 7rem;
 	}
 	.calendar {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
+	}
+	.selected-text {
+		color: green;
 	}
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Mars, Venus } from 'lucide-svelte';
 	export let selectedGender: 'male' | 'female' | '' = '';
 	export let onGenderChange: (gender: 'male' | 'female') => void;
 
@@ -10,28 +11,33 @@
 
 <div class="gender-selector sm:h-20 md:h-25 lg:h-30">
 	<button
-		class="flex flex-col p-5 text-5xl hover:bg-green-300"
-		class:bg-green-500={selectedGender === 'male'}
-		class:bg-blue-400={selectedGender !== 'male'}
+		type="button"
+		class={`calendar cursor-pointer   
+    ${selectedGender === 'male' ? 'selected-text' : 'text-white hover:text-black'}`}
 		on:click={() => selectGender('male')}
-		id={'male'}
-		aria-label="Select Male"
-		>👨
+	>
+		<Mars class="h-15 w-15" />
+		<p>Male</p>
 	</button>
 
 	<button
-		class=" p-5 text-5xl hover:bg-green-300"
-		class:bg-green-500={selectedGender === 'female'}
-		class:bg-red-400={selectedGender !== 'female'}
+		type="button"
+		class={`calendar cursor-pointer  
+    ${selectedGender === 'female' ? 'selected-text' : 'text-white hover:text-black'}`}
 		on:click={() => selectGender('female')}
-		aria-label="Select Female">👩</button
 	>
+		<Venus class="h-15 w-15" />
+		<p>Female</p>
+	</button>
 </div>
 
 <style>
 	.gender-selector {
 		display: flex;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
+	}
+	.selected-text {
+		color: green;
 	}
 </style>
