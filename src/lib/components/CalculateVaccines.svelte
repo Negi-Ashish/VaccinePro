@@ -5,13 +5,17 @@
 	export let infoMedications: { label: string; value: string }[][] = [[]];
 	export let infoOccupations: { label: string; value: string }[][] = [[]];
 	export let selectedGender: 'male' | 'female' | '' = '';
-	export let dob: string = '';
+	export let age: string = '';
 	export let additionalInfoVisited: boolean = false;
 
 	let vaccinesFetched: boolean = false;
 
 	function calculateVaccine() {
-		console.log('Call API');
+		console.log('age', age);
+		console.log('selectedGender', selectedGender);
+		console.log('infoDiseases', infoDiseases);
+		console.log('infoMedications', infoMedications);
+		console.log('infoOccupations', infoOccupations);
 		vaccinesFetched = true;
 	}
 </script>

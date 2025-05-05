@@ -68,7 +68,7 @@
 	{#if isModalOpen}
 		<div class=" bg-opacity-50 info fixed inset-0 z-50 bg-gray-800">
 			<div
-				class="relative min-h-[40%] max-w-[40%] min-w-[40%] flex-col rounded bg-white text-center"
+				class="relative min-h-[40%] max-w-[95%] min-w-[95%] flex-col rounded bg-white text-center lg:max-w-[40%] lg:min-w-[40%]"
 			>
 				<h4 class="text-lg font-bold">Provide Additional Information</h4>
 				<div class="absolute top-0 right-0">
@@ -152,11 +152,11 @@
 					</div>
 				</div>
 				<button
-					class="button2 button3 bottom-0 bg-blue-500 p-3 hover:bg-blue-600"
+					class="button2 button3 bottom-0 !mb-2 bg-blue-500 p-3 hover:bg-blue-600"
 					on:click={closeModal}>Apply</button
 				>
 				<button
-					class="button2 button3 bottom-0 bg-blue-500 p-3 hover:bg-blue-600"
+					class="button2 button3 bottom-0 !mb-2 bg-blue-500 p-3 hover:bg-blue-600"
 					on:click={closeModal}>Skip</button
 				>
 			</div>

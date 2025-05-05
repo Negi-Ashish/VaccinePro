@@ -54,7 +54,7 @@
 				{infoMedications}
 				{infoOccupations}
 				selectedGender={gender}
-				{dob}
+				{age}
 				{additionalInfoVisited}
 			/>
 		</div>

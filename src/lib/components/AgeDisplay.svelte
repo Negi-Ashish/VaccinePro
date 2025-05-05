@@ -16,7 +16,7 @@
 	}
 </script>
 
-<div class="age-display flex flex-col items-center justify-center p-5">
+<div class="age-display flex flex-col items-center justify-center p-5 text-white">
 	<!-- Scalable Image Based on Age & Gender -->
 	<img
 		src={getImagePath()}
