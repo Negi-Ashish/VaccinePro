@@ -14,6 +14,7 @@
 	let additionalInfoVisited: boolean = false;
 	let age: string = '';
 	let schedule = ['birth', '2mon', '4mon', '6mon', '9mon'];
+	let vaccine_fetched: boolean = false;
 
 	function calculateAge(dobStr: string) {
 		const birthDate = new Date(dobStr);
@@ -23,9 +24,11 @@
 	}
 </script>
 
-<div class="!px-10 !pt-30">
-	<div class="flex justify-between">
-		<div class="InputDiv">
+<div class="!px-10 !pt-8 md:!pt-30">
+	<div class="flex flex-col justify-between !space-y-8 lg:flex-row lg:!space-y-0">
+		<div
+			class="flex flex-col items-center justify-center !space-y-8 lg:flex-row lg:items-stretch lg:!space-y-0"
+		>
 			<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
 			<DOBPicker
 				{dob}
@@ -55,19 +58,12 @@
 				{additionalInfoVisited}
 			/>
 		</div>
-		<div class="OutputDiv bg-amber-950">
+		<div class="flex flex-col !space-y-8 lg:flex-row lg:!space-y-0">
 			<AgeDisplay {age} {gender} />
-			<VaccineScheduleTable {schedule} />
 		</div>
 	</div>
+	<VaccineScheduleTable {schedule} {vaccine_fetched} />
 </div>
 
 <style>
-	.InputDiv {
-		display: flex;
-	}
-	.OutputDiv {
-		display: flex;
-		width: 60%;
-	}
 </style>

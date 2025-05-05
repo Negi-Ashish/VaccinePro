@@ -54,7 +54,7 @@
 	}
 </script>
 
-<div class="info calendar2 sm:h-20 md:h-25 lg:h-30">
+<div class="info calendar2 ml-0 w-48 lg:!ml-4 lg:w-full">
 	<button
 		class={`info button2 flex-col text-white hover:text-black ${additionalInfoVisited ? 'text-green' : ''}`}
 		on:click={openModal}
@@ -62,7 +62,7 @@
 		disabled={dob == ''}
 	>
 		<FileText class="h-15 w-15" />
-		<p>Additional Info</p>
+		<p>Background</p>
 	</button>
 
 	{#if isModalOpen}
@@ -189,6 +189,5 @@
 		border: dotted;
 		border-radius: 2rem;
 		border-color: black;
-		margin-left: 1rem;
 	}
 </style>

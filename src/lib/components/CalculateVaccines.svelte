@@ -16,7 +16,7 @@
 	}
 </script>
 
-<div class="info calendar2 sm:h-20 md:h-25 lg:h-30">
+<div class="info calendar2 ml-0 w-48 lg:!ml-4 lg:w-full">
 	<button
 		class={`info button2 can-select-text flex-col ${vaccinesFetched ? 'text-green' : ''} `}
 		on:click={calculateVaccine}
@@ -51,7 +51,6 @@
 		border: dotted;
 		border-radius: 2rem;
 		border-color: black;
-		margin-left: 1rem;
 	}
 	.text-green {
 		color: green;

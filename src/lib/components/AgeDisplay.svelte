@@ -16,14 +16,12 @@
 	}
 </script>
 
-<div
-	class="age-display flex flex-col items-center justify-center bg-amber-400 p-5 sm:h-20 md:h-25 lg:h-30"
->
+<div class="age-display flex flex-col items-center justify-center p-5">
 	<!-- Scalable Image Based on Age & Gender -->
 	<img
 		src={getImagePath()}
 		alt="Profile Icon"
-		class="object-contain sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-50"
+		class="h-20 w-20 object-contain md:h-16 md:w-16 lg:h-20 lg:w-50"
 	/>
 	{#if age == ''}
 		<p>Please Select DOB</p>

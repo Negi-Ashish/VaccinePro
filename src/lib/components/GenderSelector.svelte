@@ -9,7 +9,7 @@
 	}
 </script>
 
-<div class="gender-selector sm:h-20 md:h-25 lg:h-30">
+<div class="gender-selector flex w-48 items-center justify-center lg:w-full">
 	<button
 		type="button"
 		class={`calendar cursor-pointer   
@@ -33,9 +33,6 @@
 
 <style>
 	.gender-selector {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		border: dotted;
 		border-radius: 2rem;
 	}

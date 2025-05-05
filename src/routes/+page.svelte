@@ -2,6 +2,6 @@
 	import VaccinePage from '$lib/components/VaccinePage.svelte';
 </script>
 
-<div class="h-screen bg-gray-800">
+<div>
 	<VaccinePage />
 </div>

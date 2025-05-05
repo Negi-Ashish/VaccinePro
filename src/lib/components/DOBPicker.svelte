@@ -28,7 +28,7 @@
 </svelte:head>
 
 <div
-	class={`calendar calendar2 rounded-md sm:h-20 md:h-25 lg:h-30  ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
+	class={`calendar calendar2 ml-0 w-48  lg:!ml-4 lg:w-full ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
 >
 	<button
 		type="button"
@@ -42,7 +42,7 @@
 </div>
 
 {#if showModal}
-	<div class="bg-opacity-50 fixed inset-0 flex items-start justify-center bg-gray-800 !pt-30">
+	<div class="bg-opacity-50 fixed inset-0 z-50 flex items-start justify-center bg-gray-800 !pt-30">
 		<div class="rounded-lg shadow-lg">
 			<DatePicker
 				datePickerType="single"
@@ -79,7 +79,6 @@
 		border: dotted;
 		border-radius: 2rem;
 		border-color: black;
-		margin-left: 1rem;
 	}
 	.selected-text {
 		color: green;
