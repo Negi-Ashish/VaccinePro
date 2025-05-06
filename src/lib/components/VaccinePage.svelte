@@ -5,6 +5,8 @@
 	import AgeDisplay from './AgeDisplay.svelte';
 	import VaccineScheduleTable from './VaccineScheduleTable.svelte';
 	import CalculateVaccines from './CalculateVaccines.svelte';
+	// backend calls
+	import fetchVaccine from '$lib/utils/fetchVaccine';
 
 	let gender: 'male' | 'female' | '' = '';
 	let dob: string = '';
@@ -21,6 +23,21 @@
 		const now = new Date();
 		const diff = now.getFullYear() - birthDate.getFullYear();
 		age = `${diff}`; // You can enhance this to show months/days too
+	}
+
+	async function calculateVaccine() {
+		try {
+			const response = await fetchVaccine(
+				age,
+				gender,
+				infoDiseases,
+				infoMedications,
+				infoOccupations
+			);
+			console.log(await response.json());
+		} catch (error) {
+			console.log('FE Error', error);
+		}
 	}
 </script>
 
@@ -49,14 +66,7 @@
 				onOccupationChange={(val) => (infoOccupations = val)}
 				onAdditionalModalOpen={(val) => (additionalInfoVisited = val)}
 			/>
-			<CalculateVaccines
-				{infoDiseases}
-				{infoMedications}
-				{infoOccupations}
-				selectedGender={gender}
-				{age}
-				{additionalInfoVisited}
-			/>
+			<CalculateVaccines {additionalInfoVisited} {calculateVaccine} />
 		</div>
 		<div class="flex flex-col !space-y-8 lg:flex-row lg:!space-y-0">
 			<AgeDisplay {age} {gender} />

@@ -3,6 +3,7 @@
 	import LanguageSlot from './LanguageSlot.svelte';
 	import { FileText } from 'lucide-svelte';
 	import { diseases, medications, occupations } from '../options';
+	import { onMount } from 'svelte';
 
 	export let infoDiseases: { label: string; value: string }[][] = [[]];
 	export let infoMedications: { label: string; value: string }[][] = [];

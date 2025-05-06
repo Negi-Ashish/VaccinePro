@@ -1,21 +1,18 @@
 <script lang="ts">
 	import { Syringe } from 'lucide-svelte';
 
-	export let infoDiseases: { label: string; value: string }[][] = [[]];
-	export let infoMedications: { label: string; value: string }[][] = [[]];
-	export let infoOccupations: { label: string; value: string }[][] = [[]];
-	export let selectedGender: 'male' | 'female' | '' = '';
-	export let age: string = '';
+	// export let infoDiseases: { label: string; value: string }[][] = [[]];
+	// export let infoMedications: { label: string; value: string }[][] = [[]];
+	// export let infoOccupations: { label: string; value: string }[][] = [[]];
+	// export let selectedGender: 'male' | 'female' | '' = '';
+	// export let age: string = '';
 	export let additionalInfoVisited: boolean = false;
+	export let calculateVaccine: () => Promise<void>;
 
 	let vaccinesFetched: boolean = false;
 
-	function calculateVaccine() {
-		console.log('age', age);
-		console.log('selectedGender', selectedGender);
-		console.log('infoDiseases', infoDiseases);
-		console.log('infoMedications', infoMedications);
-		console.log('infoOccupations', infoOccupations);
+	async function calculateVaccineX() {
+		await calculateVaccine();
 		vaccinesFetched = true;
 	}
 </script>
@@ -23,7 +20,7 @@
 <div class="info calendar2 ml-0 w-48 lg:!ml-4 lg:w-full">
 	<button
 		class={`info button2 can-select-text flex-col ${vaccinesFetched ? 'text-green' : ''} `}
-		on:click={calculateVaccine}
+		on:click={calculateVaccineX}
 		aria-label="Open additional info"
 		disabled={!additionalInfoVisited}
 	>
