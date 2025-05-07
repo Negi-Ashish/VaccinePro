@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types';
 import { PERPLEXITYAPI_KEY } from '$env/static/private';
 import { successMessage, errorMessage } from '$lib/utils/apiResponseFormat';
+import { jsonSchema_1, jsonSchema_2, jsonSchema_3 } from '$lib/constants/jsonSchema';
 
 type VaccineEntry = {
 	index: number;
@@ -12,24 +13,30 @@ type VaccineEntry = {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	try {
-		const { age, gender, infoDiseases, infoMedications, infoOccupations } = await request.json();
+	const { age, gender, infoDiseases, infoMedications, infoOccupations } = await request.json();
 
-		const response_function = await getVaccineSchedule(
-			age,
-			gender,
-			infoOccupations,
-			infoMedications,
-			infoDiseases
-		);
+	for (let attempt = 1; attempt <= 3; attempt++) {
+		try {
+			const response_function = await getVaccineSchedule(
+				age,
+				gender,
+				infoOccupations,
+				infoMedications,
+				infoDiseases,
+				attempt
+			);
 
-		const flatList = flattenVaccinePayloadWithMonths(response_function);
-
-		return successMessage(flatList);
-	} catch (err) {
-		console.error('API error:', err);
-		return errorMessage('API Failed.');
+			const flatList = flattenVaccinePayloadWithMonths(response_function);
+			return successMessage(flatList, attempt);
+		} catch (err) {
+			console.error(`Attempt ${attempt} failed:`, err);
+			if (attempt === 3) {
+				return errorMessage('API failed after 3 attempts.');
+			}
+			await new Promise((resolve) => setTimeout(resolve, 2000));
+		}
 	}
+	return errorMessage('Unexpected error.');
 };
 
 async function getVaccineSchedule(
@@ -37,7 +44,8 @@ async function getVaccineSchedule(
 	gender: string,
 	occupation: string[],
 	pastMedications: string[],
-	pastDiseases: string[]
+	pastDiseases: string[],
+	attempt: number
 ): Promise<
 	Record<
 		string,
@@ -54,6 +62,8 @@ async function getVaccineSchedule(
 		}
 	>
 > {
+	const last_month = attempt === 1 ? '12th_Month' : attempt === 2 ? '6th_Month' : '3rd_Month';
+	const jsonSchema = attempt === 1 ? jsonSchema_1 : attempt === 2 ? jsonSchema_2 : jsonSchema_3;
 	const apiKey = PERPLEXITYAPI_KEY; // Securely store your API key
 	const url = 'https://api.perplexity.ai/chat/completions';
 
@@ -63,7 +73,7 @@ async function getVaccineSchedule(
 	with past medications ${JSON.stringify(pastMedications)} and past diseases ${JSON.stringify(pastDiseases)},
 	generate a vaccination schedule.
 	
-	Output **only** a JSON object where each key is a month ("1st_Month", "2nd_Month", …, "12th_Month") 
+	Output **only** a JSON object where each key is a month ("1st_Month", "2nd_Month", …, "${last_month}") 
 	that includes vaccine recommendations. Each month's value must be an object with the following structure for each vaccine:
 	
 	- "vaccines": an array of vaccine names (strings),
@@ -116,363 +126,6 @@ async function getVaccineSchedule(
 		throw new Error('Failed to parse JSON from Perplexity API: ' + err);
 	}
 }
-
-const jsonSchema = {
-	schema: {
-		type: 'object',
-		properties: {
-			'1st_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'2nd_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'3rd_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'4th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'5th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'6th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'7th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'8th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'9th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'10th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'11th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			},
-			'12th_Month': {
-				type: 'object',
-				properties: {
-					vaccines: {
-						type: 'array',
-						items: { type: 'string' }
-					},
-					details: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								howItsGiven: { type: 'string' },
-								commonSideEffects: { type: 'string' },
-								whyItsImportant: { type: 'string' }
-							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
-						}
-					}
-				},
-				required: ['vaccines', 'details']
-			}
-		},
-		additionalProperties: false
-	}
-};
 
 function flattenVaccinePayloadWithMonths(
 	rawPayload: Record<

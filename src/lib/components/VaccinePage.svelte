@@ -26,6 +26,7 @@
 	let age: string = '';
 	let schedule: VaccineEntry[] = [];
 	let vaccine_fetched: true | false | 'error' | 'fetching' = false;
+	let attempt: 1 | 2 | 3 = 1;
 
 	function calculateAge(dobStr: string) {
 		const birthDate = new Date(dobStr);
@@ -49,6 +50,7 @@
 			schedule = rest.payload;
 			if (rest.isSuccessful) {
 				vaccine_fetched = true;
+				attempt = rest.attempt;
 			} else {
 				vaccine_fetched = 'error';
 			}
@@ -84,13 +86,13 @@
 				onOccupationChange={(val) => (infoOccupations = val)}
 				onAdditionalModalOpen={(val) => (additionalInfoVisited = val)}
 			/>
-			<CalculateVaccines {additionalInfoVisited} {calculateVaccine} />
+			<CalculateVaccines {additionalInfoVisited} {calculateVaccine} {vaccine_fetched} />
 		</div>
 		<div class="flex flex-col !space-y-8 lg:flex-row lg:!space-y-0">
 			<AgeDisplay {age} {gender} />
 		</div>
 	</div>
-	<VaccineScheduleTable {schedule} {vaccine_fetched} />
+	<VaccineScheduleTable {schedule} {vaccine_fetched} {attempt} />
 </div>
 
 <style>

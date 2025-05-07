@@ -9,6 +9,10 @@
 	};
 	export let schedule: VaccineEntry[];
 	export let vaccine_fetched: true | false | 'error' | 'fetching' = false;
+	export let attempt: 1 | 2 | 3 = 1;
+
+	const no_of_month = attempt === 1 ? 12 : attempt === 2 ? 6 : 3;
+
 	// Define table headings
 	const headers: string[] = [
 		'Index',
@@ -22,6 +26,11 @@
 
 <div class="relative !mt-20 w-full overflow-x-auto !pb-20">
 	{#if vaccine_fetched == true}
+		<h2
+			class="mb-2 text-center text-[50px] leading-none font-bold text-white sm:text-[80px] md:text-[100px] lg:text-left"
+		>
+			Details of the next {no_of_month} months of vaccines are as follows.
+		</h2>
 		<table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
 			<thead class=" bg-blue-400 text-black uppercase">
 				<tr>

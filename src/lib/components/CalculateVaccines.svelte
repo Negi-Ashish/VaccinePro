@@ -9,20 +9,20 @@
 	export let additionalInfoVisited: boolean = false;
 	export let calculateVaccine: () => Promise<void>;
 
-	let vaccinesFetched: boolean = false;
+	export let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 
 	async function calculateVaccineX() {
 		await calculateVaccine();
-		vaccinesFetched = true;
+		vaccine_fetched = true;
 	}
 </script>
 
 <div class="info calendar2 ml-0 w-48 lg:!ml-4 lg:w-full">
 	<button
-		class={`info button2 can-select-text flex-col ${vaccinesFetched ? 'text-green' : ''} `}
+		class={`info button2 can-select-text flex-col ${vaccine_fetched == true ? 'text-green' : ''} `}
 		on:click={calculateVaccineX}
 		aria-label="Open additional info"
-		disabled={!additionalInfoVisited}
+		disabled={!additionalInfoVisited || vaccine_fetched === 'fetching'}
 	>
 		<Syringe class="h-15 w-15" />
 		<p>Get Vaccines</p>

@@ -8,9 +8,10 @@ export function errorMessage(message: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function successMessage(payload: any) {
+export function successMessage(payload: any, attempt: number) {
 	return json({
 		isSuccessful: true,
-		payload: payload
+		payload,
+		attempt
 	});
 }
