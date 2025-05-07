@@ -8,6 +8,15 @@
 	// backend calls
 	import fetchVaccine from '$lib/utils/fetchVaccine';
 
+	type VaccineEntry = {
+		index: number;
+		month: string;
+		vaccineName: string;
+		howItsGiven: string;
+		commonSideEffects: string;
+		whyItsImportant: string;
+	};
+
 	let gender: 'male' | 'female' | '' = '';
 	let dob: string = '';
 	let infoDiseases: { label: string; value: string }[][] = [];
@@ -15,8 +24,8 @@
 	let infoOccupations: { label: string; value: string }[][] = [];
 	let additionalInfoVisited: boolean = false;
 	let age: string = '';
-	let schedule = ['birth', '2mon', '4mon', '6mon', '9mon'];
-	let vaccine_fetched: boolean = false;
+	let schedule: VaccineEntry[] = [];
+	let vaccine_fetched: true | false | 'error' | 'fetching' = 'error';
 
 	function calculateAge(dobStr: string) {
 		const birthDate = new Date(dobStr);
@@ -34,8 +43,16 @@
 				infoMedications,
 				infoOccupations
 			);
-			console.log(await response.json());
+
+			let rest = await response.json();
+			schedule = rest.payload;
+			if (rest.isSuccessful) {
+				vaccine_fetched = true;
+			} else {
+				vaccine_fetched = 'error';
+			}
 		} catch (error) {
+			vaccine_fetched = 'error';
 			console.log('FE Error', error);
 		}
 	}

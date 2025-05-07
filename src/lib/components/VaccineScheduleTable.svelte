@@ -1,39 +1,54 @@
 <script lang="ts">
-	export let schedule: string[] = ['birth', '2mon', '4mon', '6mon', '9mon'];
-	export let vaccine_fetched: Boolean = false;
+	type VaccineEntry = {
+		index: number;
+		month: string;
+		vaccineName: string;
+		howItsGiven: string;
+		commonSideEffects: string;
+		whyItsImportant: string;
+	};
+	export let schedule: VaccineEntry[];
+	export let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 	// Define table headings
-	const headers: string[] = ['Time', 'Vaccine', 'Category', 'Notes'];
-
-	// Define table data as array of objects
-	const data = [
-		{ time: 'Birth', vaccine: 'BCG', category: 'Live', notes: 'Given at birth' },
-		{ time: '6 Weeks', vaccine: 'DTP', category: 'Toxoid', notes: 'First dose' },
-		{ time: '10 Weeks', vaccine: 'Polio', category: 'Inactivated', notes: 'Oral drops' },
-		{ time: '14 Weeks', vaccine: 'Hep B', category: 'Inactivated', notes: 'Booster' },
-		{ time: '9 Months', vaccine: 'Measles', category: 'Live', notes: 'Single dose' }
+	const headers: string[] = [
+		'Index',
+		'Vaccine Name',
+		'Month',
+		"Why it's Important",
+		"How it's Given",
+		'Common Side Effects'
 	];
 </script>
 
 <div class="relative !mt-20 w-full overflow-x-auto !pb-20">
-	{#if vaccine_fetched}
+	{#if vaccine_fetched == true}
 		<table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-			<thead class="bg-gray-300 text-black uppercase">
+			<thead class=" bg-blue-400 text-black uppercase">
 				<tr>
 					{#each headers as header}
-						<th scope="col" class="!px-6 !py-3">{header}</th>
+						<th scope="col" class="!px-6 !py-3 !font-bold">{header}</th>
 					{/each}
 				</tr>
 			</thead>
 			<tbody>
-				{#each data as row}
-					<tr class="border-b bg-gray-200">
-						<td class="!px-6 !py-4 font-medium text-gray-900 dark:text-white">{row.time}</td>
-						<td class="!px-6 !py-4">{row.vaccine}</td>
-						<td class="!px-6 !py-4">{row.category}</td>
-						<td class="!px-6 !py-4">{row.notes}</td>
+				{#each schedule as row}
+					<tr class="border-b bg-gray-200 !font-bold">
+						<td class=" !px-6 !py-4 text-center text-gray-900">{row.index}</td>
+						<td class="!px-6 !py-4">{row.vaccineName}</td>
+						<td class=" !px-6 !py-4 text-center">{row.month}</td>
+						<td class="!px-6 !py-4">{row.whyItsImportant}</td>
+						<td class=" !px-6 !py-4">{row.howItsGiven}</td>
+						<td class="!px-6 !py-4">{row.commonSideEffects}</td>
 					</tr>
 				{/each}
 			</tbody>
 		</table>
+	{/if}
+	{#if vaccine_fetched == 'error'}
+		<h2
+			class="mb-2 text-center text-[50px] leading-none font-bold text-white sm:text-[80px] md:text-[100px] lg:text-left"
+		>
+			Please try Again!
+		</h2>
 	{/if}
 </div>
