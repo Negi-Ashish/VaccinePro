@@ -25,7 +25,7 @@
 	let additionalInfoVisited: boolean = false;
 	let age: string = '';
 	let schedule: VaccineEntry[] = [];
-	let vaccine_fetched: true | false | 'error' | 'fetching' = 'error';
+	let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 
 	function calculateAge(dobStr: string) {
 		const birthDate = new Date(dobStr);
@@ -35,6 +35,7 @@
 	}
 
 	async function calculateVaccine() {
+		vaccine_fetched = 'fetching';
 		try {
 			const response = await fetchVaccine(
 				age,

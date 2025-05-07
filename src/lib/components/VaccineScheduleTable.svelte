@@ -51,4 +51,10 @@
 			Please try Again!
 		</h2>
 	{/if}
+
+	{#if vaccine_fetched == 'fetching'}
+		<div class="flex h-3/6 items-center justify-center">
+			<img class="" src="/sonarAPI.gif" alt="Logo" />
+		</div>
+	{/if}
 </div>
