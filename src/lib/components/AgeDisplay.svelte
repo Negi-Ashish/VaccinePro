@@ -16,7 +16,7 @@
 	}
 </script>
 
-<div class="age-display flex flex-col items-center justify-center p-5 text-white">
+<div class="flex flex-col !items-center !justify-center p-5 text-white">
 	<!-- Scalable Image Based on Age & Gender -->
 	<img
 		src={getImagePath()}
@@ -24,8 +24,8 @@
 		class="h-20 w-20 object-contain md:h-16 md:w-16 lg:h-20 lg:w-50"
 	/>
 	{#if age == ''}
-		<p>Please Select DOB</p>
+		<p>Select DOB</p>
 	{:else}
-		<p>Calculated Age: {age}</p>
+		<p>Age: {age}</p>
 	{/if}
 </div>

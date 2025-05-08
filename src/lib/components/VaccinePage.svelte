@@ -5,6 +5,7 @@
 	import AgeDisplay from './AgeDisplay.svelte';
 	import VaccineScheduleTable from './VaccineScheduleTable.svelte';
 	import CalculateVaccines from './CalculateVaccines.svelte';
+	import ResetButton from './ResetButton.svelte';
 	// backend calls
 	import fetchVaccine from '$lib/utils/fetchVaccine';
 
@@ -27,6 +28,18 @@
 	let schedule: VaccineEntry[] = [];
 	let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 	let attempt: 1 | 2 | 3 = 1;
+
+	function Reset() {
+		gender = '';
+		dob = '';
+		infoDiseases = [];
+		infoMedications = [];
+		infoOccupations = [];
+		additionalInfoVisited = false;
+		age = '';
+		schedule = [];
+		vaccine_fetched = false;
+	}
 
 	function calculateAge(dobStr: string) {
 		const birthDate = new Date(dobStr);
@@ -66,10 +79,15 @@
 		<div
 			class="flex flex-col items-center justify-center !space-y-8 lg:flex-row lg:items-stretch lg:!space-y-0"
 		>
-			<GenderSelector selectedGender={gender} onGenderChange={(g) => (gender = g)} />
+			<GenderSelector
+				selectedGender={gender}
+				{vaccine_fetched}
+				onGenderChange={(g) => (gender = g)}
+			/>
 			<DOBPicker
 				{dob}
 				selectedGender={gender}
+				{vaccine_fetched}
 				onDOBChange={(d) => {
 					dob = d;
 					calculateAge(d);
@@ -81,12 +99,14 @@
 				{infoOccupations}
 				{dob}
 				{additionalInfoVisited}
+				{vaccine_fetched}
 				onInfoChange={(val) => (infoDiseases = val)}
 				onMedicationChange={(val) => (infoMedications = val)}
 				onOccupationChange={(val) => (infoOccupations = val)}
 				onAdditionalModalOpen={(val) => (additionalInfoVisited = val)}
 			/>
 			<CalculateVaccines {additionalInfoVisited} {calculateVaccine} {vaccine_fetched} />
+			<ResetButton {Reset} {vaccine_fetched} />
 		</div>
 		<div class="flex flex-col !space-y-8 lg:flex-row lg:!space-y-0">
 			<AgeDisplay {age} {gender} />

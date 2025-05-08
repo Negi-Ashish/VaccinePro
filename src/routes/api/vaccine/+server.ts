@@ -14,7 +14,6 @@ type VaccineEntry = {
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { age, gender, infoDiseases, infoMedications, infoOccupations } = await request.json();
-
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
 			const response_function = await getVaccineSchedule(
@@ -120,7 +119,7 @@ async function getVaccineSchedule(
 
 	try {
 		// Safely parse the JSON content:contentReference[oaicite:9]{index=9}
-		console.log('content', content);
+		// console.log('content', content);
 		return JSON.parse(content);
 	} catch (err) {
 		throw new Error('Failed to parse JSON from Perplexity API: ' + err);

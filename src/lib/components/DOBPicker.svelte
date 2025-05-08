@@ -4,8 +4,21 @@
 	export let dob: string = '';
 	export let onDOBChange: (date: string) => void;
 	export let selectedGender: 'male' | 'female' | '' = '';
+	export let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 
 	let showModal = false;
+
+	$: isDisabled = selectedGender == '' || dob !== '';
+	$: stateClass =
+		selectedGender === ''
+			? 'no-gender-selected'
+			: dob === ''
+				? 'not-selected-text'
+				: vaccine_fetched == 'fetching' || vaccine_fetched == false
+					? 'selected-text'
+					: vaccine_fetched == 'error'
+						? '!text-red-500'
+						: '!text-yellow-400';
 
 	function handleDateChange(selectedDates: Date[]) {
 		if (selectedDates.length > 0) {
@@ -27,14 +40,12 @@
 	<link rel="stylesheet" href="https://unpkg.com/carbon-components-svelte/css/white.css" />
 </svelte:head>
 
-<div
-	class={`calendar calendar2 ml-0 w-48  lg:!ml-4 lg:w-full ${dob !== '' ? 'selected-text' : 'text-white hover:text-black'}`}
->
+<div class={`calendar calendar2 ml-0 w-48  lg:!ml-4 lg:w-full ${stateClass}`}>
 	<button
 		type="button"
 		class="calendar cursor-pointer focus:outline-none"
 		on:click={() => (showModal = true)}
-		disabled={selectedGender == ''}
+		disabled={isDisabled}
 	>
 		<Calendar class="h-15 w-15" />
 		<p>DOB</p>
@@ -72,7 +83,6 @@
 		flex-direction: column;
 	}
 	:disabled {
-		color: gray;
 		cursor: not-allowed;
 	}
 	.calendar2 {
@@ -80,7 +90,25 @@
 		border-radius: 2rem;
 		border-color: black;
 	}
+	.no-gender-selected {
+		color: gray;
+	}
+	.no-gender-selected:disabled {
+		color: gray;
+	}
+	.not-selected-text {
+		color: white;
+	}
+	.not-selected-text:disabled {
+		color: gray;
+	}
+	.not-selected-text:hover {
+		color: black;
+	}
 	.selected-text {
+		color: green;
+	}
+	.selected-text:disabled {
 		color: green;
 	}
 </style>

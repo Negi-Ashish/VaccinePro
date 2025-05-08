@@ -3,7 +3,6 @@
 	import LanguageSlot from './LanguageSlot.svelte';
 	import { FileText } from 'lucide-svelte';
 	import { diseases, medications, occupations } from '../options';
-	import { onMount } from 'svelte';
 
 	export let infoDiseases: { label: string; value: string }[][] = [[]];
 	export let infoMedications: { label: string; value: string }[][] = [];
@@ -14,8 +13,21 @@
 	export let onMedicationChange: (infoMedications: { label: string; value: string }[][]) => void;
 	export let onOccupationChange: (infoOccupations: { label: string; value: string }[][]) => void;
 	export let onAdditionalModalOpen: (additionalInfoVisited: boolean) => void;
+	export let vaccine_fetched: true | false | 'error' | 'fetching' = false;
 
 	let isModalOpen = false;
+
+	$: isDisabled = dob === '' || additionalInfoVisited == true;
+	$: stateClass =
+		dob === ''
+			? 'no-dob-selected'
+			: additionalInfoVisited == false
+				? 'not-selected-text'
+				: vaccine_fetched == 'fetching' || vaccine_fetched == false
+					? 'selected-text'
+					: vaccine_fetched == 'error'
+						? '!text-red-500'
+						: '!text-yellow-400';
 
 	function openModal() {
 		isModalOpen = true;
@@ -57,10 +69,10 @@
 
 <div class="info calendar2 ml-0 w-48 lg:!ml-4 lg:w-full">
 	<button
-		class={`info button2 flex-col text-white hover:text-black ${additionalInfoVisited ? 'text-green' : ''}`}
+		class={`info button2 flex-col hover:text-black ${stateClass}`}
 		on:click={openModal}
 		aria-label="Open additional info"
-		disabled={dob == ''}
+		disabled={isDisabled}
 	>
 		<FileText class="h-15 w-15" />
 		<p>Background</p>
@@ -170,10 +182,7 @@
 		width: 7rem;
 		cursor: pointer;
 	}
-	:disabled {
-		color: gray;
-		cursor: not-allowed;
-	}
+
 	.button3 {
 		border-radius: 10px;
 		margin-top: 3rem;
@@ -183,12 +192,30 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.text-green {
-		color: green;
-	}
+
 	.calendar2 {
 		border: dotted;
 		border-radius: 2rem;
 		border-color: black;
+	}
+
+	.no-dob-selected:disabled {
+		color: gray;
+	}
+	.not-selected-text {
+		color: white;
+	}
+	.not-selected-text:disabled {
+		color: gray;
+	}
+	.not-selected-text:hover {
+		color: black;
+	}
+
+	.selected-text:disabled {
+		color: green;
+	}
+	:disabled {
+		cursor: not-allowed;
 	}
 </style>
