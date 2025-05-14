@@ -2,6 +2,8 @@ import type { RequestHandler } from './$types';
 import { PERPLEXITYAPI_KEY } from '$env/static/private';
 import { successMessage, errorMessage } from '$lib/utils/apiResponseFormat';
 import { jsonSchema_1, jsonSchema_2, jsonSchema_3 } from '$lib/constants/jsonSchema';
+// import { writeFile } from 'fs/promises';
+// import path from 'path';
 
 type VaccineEntry = {
 	index: number;
@@ -27,12 +29,17 @@ export const POST: RequestHandler = async ({ request }) => {
 
 			const flatList = flattenVaccinePayloadWithMonths(response_function);
 			return successMessage(flatList, attempt);
-		} catch (err) {
-			console.error(`Attempt ${attempt} failed:`, err);
-			if (attempt === 3) {
-				return errorMessage('API failed after 3 attempts.');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			if (err.name === 'AbortError') {
+				console.error('Request timed out or was aborted');
+			} else {
+				console.error(`Attempt ${attempt} failed:`, err);
+				if (attempt === 3) {
+					return errorMessage('API failed after 3 attempts.');
+				}
+				await new Promise((resolve) => setTimeout(resolve, 2000));
 			}
-			await new Promise((resolve) => setTimeout(resolve, 2000));
 		}
 	}
 	return errorMessage('Unexpected error.');
@@ -51,12 +58,9 @@ async function getVaccineSchedule(
 		{
 			vaccines: string[];
 			details: {
-				whenToTake: string;
-				dosage: string;
 				howItsGiven: string;
 				commonSideEffects: string;
 				whyItsImportant: string;
-				specialNotes: string;
 			}[];
 		}
 	>
@@ -68,26 +72,30 @@ async function getVaccineSchedule(
 
 	// Construct the user prompt including patient details and output instructions
 	const userPrompt = `
-	Based on a patient who is a ${age}-year-old ${gender} working as ${occupation},
-	with past medications ${JSON.stringify(pastMedications)} and past diseases ${JSON.stringify(pastDiseases)},
-	generate a vaccination schedule.
-	
-	Output **only** a JSON object where each key is a month ("1st_Month", "2nd_Month", …, "${last_month}") 
-	that includes vaccine recommendations. Each month's value must be an object with the following structure for each vaccine:
-	
-	- "vaccines": an array of vaccine names (strings),
-	- "details": an array of objects where each object corresponds to the same index in the vaccines array, with the following keys:
-	  - "howItsGiven": string (e.g., "Intramuscular injection"),
-	  - "commonSideEffects": string (e.g., "Soreness at injection site, mild fever, fatigue"),
-	  - "whyItsImportant": string (e.g., "Protects against seasonal flu strains and complications like pneumonia").
-	
-	Return only valid JSON. Do not include any explanation or text outside the JSON structure. The schema must match exactly.`;
+        Given a patient who is a ${age}-year-old ${gender} working as ${occupation} with past medications ${JSON.stringify(pastMedications)} 
+        and past diseases ${JSON.stringify(pastDiseases)}, generate a vaccination schedule. 
+        The output must be a valid JSON object with keys "1st_Month", "2nd_Month", ..., up to "${last_month}". 
+        Each key represents a month of the schedule. The schedule can cover up to 12 months; 
+        if a shorter schedule is needed (such as 6 or 3 months), include only those months. 
+		Each month key should map to an object following the Plexity API schema. 
+        Each month object must contain two fields: "vaccines" and "details". 
+		The "vaccines" field should be an array of vaccine name strings. 
+		The "details" field should be an array of objects with additional information for each vaccine. 
+        Each object in the "details" array must include the following fields exactly: "howItsGiven", "commonSideEffects", "whyItsImportant". 
+        All fields are required. Use concise, consistent terms (for example, use "IM" instead of "Intramuscular injection"). 
+        Include every month from the first to the last. Ensure that each month has either vaccine recommendations or a valid empty structure. 
+		If a month has no recommended vaccines, include it with an empty "vaccines" array and an empty "details" array. 
+        Return only valid JSON matching the described schema. Do not include any additional text or explanation.`;
 
 	// Prepare the API request payload
 	const payload = {
 		model: 'sonar-pro', // use the Sonar Pro model:contentReference[oaicite:0]{index=0}
 		messages: [
-			{ role: 'system', content: 'Be precise and concise.' },
+			{
+				role: 'system',
+				content: `You are a licensed medical doctor and vaccine expert. Provide accurate, up-to-date, 
+					and concise medical advice based on established health guidelines. Respond in a clear, reassuring, and professional tone.`
+			},
 			{ role: 'user', content: userPrompt.trim() }
 		],
 		response_format: {
@@ -95,13 +103,17 @@ async function getVaccineSchedule(
 			type: 'json_schema',
 			json_schema: jsonSchema
 		},
-		max_tokens: 4000, // allow enough length for the full schedule:contentReference[oaicite:2]{index=2}
+		max_tokens: 10000, // allow enough length for the full schedule:contentReference[oaicite:2]{index=2}
 		temperature: 0.0, // low randomness for deterministic, factual output:contentReference[oaicite:3]{index=3}
 		top_p: 1.0, // use full probability mass to reduce randomness:contentReference[oaicite:4]{index=4}
 		top_k: 1, // consider only the most likely token at each step to be deterministic:contentReference[oaicite:5]{index=5}
-		frequency_penalty: 1, // discourage repetition (default is 1):contentReference[oaicite:6]{index=6}
+		frequency_penalty: 0, // discourage repetition (default is 1):contentReference[oaicite:6]{index=6}
 		presence_penalty: 0 // default value; no extra emphasis on new topics
 	};
+
+	// For increasing seconds of wait
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), 180000); // 180 seconds timeout
 
 	// Make the HTTP POST request
 	const response = await fetch(url, {
@@ -111,9 +123,10 @@ async function getVaccineSchedule(
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${apiKey}` // use Bearer token from environment:contentReference[oaicite:7]{index=7}:contentReference[oaicite:8]{index=8}
 		},
-		body: JSON.stringify(payload)
+		body: JSON.stringify(payload),
+		signal: controller.signal
 	});
-
+	clearTimeout(timeout); // clear if successful
 	const result = await response.json();
 	const content = result.choices[0].message.content;
 
@@ -122,6 +135,10 @@ async function getVaccineSchedule(
 		// console.log('content', content);
 		return JSON.parse(content);
 	} catch (err) {
+		// const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+		// const filename = path.join('/tmp', `failed-response-${timestamp}.txt`);
+		// await writeFile(filename, content, 'utf8');
+
 		throw new Error('Failed to parse JSON from Perplexity API: ' + err);
 	}
 }
@@ -132,12 +149,9 @@ function flattenVaccinePayloadWithMonths(
 		{
 			vaccines: string[];
 			details: {
-				whenToTake: string;
-				dosage: string;
 				howItsGiven: string;
 				commonSideEffects: string;
 				whyItsImportant: string;
-				specialNotes: string;
 			}[];
 		}
 	>
@@ -179,12 +193,9 @@ function flattenVaccinePayloadWithMonths(
 
 		for (let j = 0; j < vaccines.length; j++) {
 			const detail = details[j] || {
-				whenToTake: '',
-				dosage: '',
 				howItsGiven: '',
 				commonSideEffects: '',
-				whyItsImportant: '',
-				specialNotes: ''
+				whyItsImportant: ''
 			};
 
 			result.push({

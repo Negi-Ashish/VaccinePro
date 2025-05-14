@@ -18,14 +18,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -47,14 +40,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -76,14 +62,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -105,14 +84,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -134,14 +106,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -163,14 +128,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -192,14 +150,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -221,14 +172,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -250,14 +194,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -279,14 +216,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -308,14 +238,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -337,14 +260,7 @@ export const jsonSchema_1 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -375,14 +291,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -404,14 +313,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -433,14 +335,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -462,14 +357,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -491,14 +379,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -520,14 +401,7 @@ export const jsonSchema_2 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -558,14 +432,7 @@ export const jsonSchema_3 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -587,14 +454,7 @@ export const jsonSchema_3 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
@@ -616,14 +476,7 @@ export const jsonSchema_3 = {
 								commonSideEffects: { type: 'string' },
 								whyItsImportant: { type: 'string' }
 							},
-							required: [
-								'whenToTake',
-								'dosage',
-								'howItsGiven',
-								'commonSideEffects',
-								'whyItsImportant',
-								'specialNotes'
-							]
+							required: ['howItsGiven', 'commonSideEffects', 'whyItsImportant']
 						}
 					}
 				},
