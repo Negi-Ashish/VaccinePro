@@ -73,7 +73,9 @@ async function getVaccineSchedule(
 	// Construct the user prompt including patient details and output instructions
 	const userPrompt = `
         Given a patient who is a ${age}-year-old ${gender} working as ${occupation} with past medications ${JSON.stringify(pastMedications)} 
-        and past diseases ${JSON.stringify(pastDiseases)}, generate a vaccination schedule. 
+        and past diseases ${JSON.stringify(pastDiseases)}, generate a vaccination schedule.
+		If the patient's age is 0, treat them as a newborn and include all vaccines typically 
+		administered at birth (e.g., BCG, OPV, Hepatitis B) based on standard national immunization guidelines.
         The output must be a valid JSON object with keys "1st_Month", "2nd_Month", ..., up to "${last_month}". 
         Each key represents a month of the schedule. The schedule can cover up to 12 months; 
         if a shorter schedule is needed (such as 6 or 3 months), include only those months. 
@@ -85,7 +87,8 @@ async function getVaccineSchedule(
         All fields are required. Use concise, consistent terms (for example, use "IM" instead of "Intramuscular injection"). 
         Include every month from the first to the last. Ensure that each month has either vaccine recommendations or a valid empty structure. 
 		If a month has no recommended vaccines, include it with an empty "vaccines" array and an empty "details" array. 
-        Return only valid JSON matching the described schema. Do not include any additional text or explanation.`;
+        Return only valid JSON matching the described schema. Do not include include citation markers like [1], [2], 
+		or reference numbers in any field or any additional text or explanation.`;
 
 	// Prepare the API request payload
 	const payload = {
@@ -108,7 +111,8 @@ async function getVaccineSchedule(
 		top_p: 1.0, // use full probability mass to reduce randomness:contentReference[oaicite:4]{index=4}
 		top_k: 1, // consider only the most likely token at each step to be deterministic:contentReference[oaicite:5]{index=5}
 		frequency_penalty: 0, // discourage repetition (default is 1):contentReference[oaicite:6]{index=6}
-		presence_penalty: 0 // default value; no extra emphasis on new topics
+		presence_penalty: 0, // default value; no extra emphasis on new topics
+		search_domain_filter: ['cdc.gov', 'who.int', 'mayoclinic.org', 'unicef.org', 'nhm.gov.in']
 	};
 
 	// For increasing seconds of wait
