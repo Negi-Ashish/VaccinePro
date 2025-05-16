@@ -1,4 +1,17 @@
 <script lang="ts">
+	import jsPDF from 'jspdf';
+	import autoTable from 'jspdf-autotable';
+
+	// Define table headings
+	const headers: string[] = [
+		'Index',
+		'Vaccine Name',
+		'Month',
+		"Why it's Important",
+		"How it's Given",
+		'Common Side Effects'
+	];
+
 	type VaccineEntry = {
 		index: number;
 		month: string;
@@ -13,15 +26,56 @@
 
 	$: no_of_month = attempt === 1 ? 12 : attempt === 2 ? 6 : 3;
 
-	// Define table headings
-	const headers: string[] = [
-		'Index',
-		'Vaccine Name',
-		'Month',
-		"Why it's Important",
-		"How it's Given",
-		'Common Side Effects'
-	];
+	const generatePDF = () => {
+		const pdf = new jsPDF('landscape');
+		pdf.text('Vaccine Schedule Report', pdf.internal.pageSize.getWidth() / 2, 10, {
+			align: 'center'
+		});
+
+		// const logo = new Image();
+		// logo.src = '/perplexity.png';
+		// logo.onload = () => {
+		// 	pdf.addImage(logo, 'PNG', 10, 5, 30, 10); // x, y, width, height
+		// 	// then call autoTable
+		// };
+
+		const tabledata = schedule.map((item) => [
+			item.index,
+			item.vaccineName,
+			item.month,
+			item.whyItsImportant,
+			item.howItsGiven,
+			item.commonSideEffects
+		]);
+
+		// Auto page breaks and table styling
+
+		autoTable(pdf, {
+			startY: 20,
+			head: [headers],
+			body: tabledata,
+			styles: {
+				fontSize: 10,
+				cellWidth: 'wrap',
+				cellPadding: 2,
+				overflow: 'linebreak' // wrap content
+			},
+			margin: { top: 20, left: 10, right: 10 },
+			tableWidth: 'wrap', // auto-fit the table to the page
+			horizontalPageBreak: true, // handles wide tables better
+			horizontalPageBreakRepeat: 0, // no header repeat needed for centered layout
+			columnStyles: {
+				0: { cellWidth: 20 }, // index
+				1: { cellWidth: 30 }, // vaccineName
+				2: { cellWidth: 20 }, // month
+				3: { cellWidth: 100 }, // whyItsImportant
+				4: { cellWidth: 30 }, // howItsGiven
+				5: { cellWidth: 70 } // howItsGiven
+			}
+		});
+
+		pdf.save('vaccine_schedule.pdf');
+	};
 </script>
 
 <div class="relative !mt-20 w-full overflow-x-auto !pb-20">
@@ -31,7 +85,7 @@
 		>
 			Details of the next {no_of_month} months of vaccines are as follows.
 		</h2>
-		<div class="overflow-y-hidden rounded-lg border border-gray-300">
+		<div id="print-section" class="overflow-y-hidden rounded-lg border border-gray-300">
 			<table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
 				<thead class=" bg-blue-400 text-black uppercase">
 					<tr>
@@ -54,6 +108,7 @@
 				</tbody>
 			</table>
 		</div>
+		<button on:click={generatePDF}>Download PDF</button>
 	{/if}
 	{#if vaccine_fetched == 'error'}
 		<h2
