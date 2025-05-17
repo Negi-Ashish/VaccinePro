@@ -108,7 +108,14 @@
 				</tbody>
 			</table>
 		</div>
-		<button on:click={generatePDF}>Download PDF</button>
+		<div class="flex justify-center">
+			<button
+				on:click={generatePDF}
+				class="!mt-5 w-fit cursor-pointer !rounded-2xl bg-blue-300 p-5"
+			>
+				Download PDF
+			</button>
+		</div>
 	{/if}
 	{#if vaccine_fetched == 'error'}
 		<h2
