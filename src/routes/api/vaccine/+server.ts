@@ -16,18 +16,24 @@ type VaccineEntry = {
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { age, gender, infoDiseases, infoMedications, infoOccupations } = await request.json();
+
+	const infoDiseases_values = infoDiseases[0].map((item: { value: string }) => item.value);
+	const infoMedications_values = infoMedications[0].map((item: { value: string }) => item.value);
+	const infoOccupations_values = infoOccupations[0].map((item: { value: string }) => item.value);
+
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
 			const response_function = await getVaccineSchedule(
 				age,
 				gender,
-				infoOccupations,
-				infoMedications,
-				infoDiseases,
+				infoOccupations_values,
+				infoMedications_values,
+				infoDiseases_values,
 				attempt
 			);
-
+			console.log('response_function', response_function);
 			const flatList = flattenVaccinePayloadWithMonths(response_function);
+			// console.log('response_function', response_function);
 			return successMessage(flatList, attempt);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
@@ -70,12 +76,22 @@ async function getVaccineSchedule(
 	const apiKey = PERPLEXITYAPI_KEY; // Securely store your API key
 	const url = 'https://api.perplexity.ai/chat/completions';
 
+	const occupation_string = JSON.stringify(occupation);
+	const past_medications_string = JSON.stringify(pastMedications);
+	const past_diseases_string = JSON.stringify(pastDiseases);
+
 	// Construct the user prompt including patient details and output instructions
 	const userPrompt = `
-        Given a patient who is a ${age}-year-old ${gender} working as ${occupation} with past medications ${JSON.stringify(pastMedications)} 
-        and past diseases ${JSON.stringify(pastDiseases)}, generate a vaccination schedule.
+        Given a patient who is a ${age}-year-old ${gender} 
+		${occupation_string === '[]' ? '' : `working as ${occupation_string}`} 
+		${past_medications_string == '[]' ? '' : `with past medications ${past_medications_string}`} 
+		${past_diseases_string == '[]' ? '' : `and past diseases ${past_diseases_string}`}, generate a vaccination schedule.
 		If the patient's age is 0, treat them as a newborn and include all vaccines typically 
 		administered at birth (e.g., BCG, OPV, Hepatitis B) based on standard national immunization guidelines.
+		For adults, consider age-specific recommendations such as flu, Tdap booster, shingles, HPV, travel-related, 
+		or occupational vaccines.
+		Tailor recommendations based on medical history, occupation (e.g., healthcare, lab worker, traveler), 
+		and risk factors (e.g., chronic diseases).
         The output must be a valid JSON object with keys "1st_Month", "2nd_Month", ..., up to "${last_month}". 
         Each key represents a month of the schedule. The schedule can cover up to 12 months; 
         if a shorter schedule is needed (such as 6 or 3 months), include only those months. 
@@ -87,10 +103,11 @@ async function getVaccineSchedule(
         All fields are required. Use concise, consistent terms (for example, use "IM" instead of "Intramuscular injection"). 
         Include every month from the first to the last. Ensure that each month has either vaccine recommendations or a valid empty structure. 
 		If a month has no recommended vaccines, include it with an empty "vaccines" array and an empty "details" array. 
-        Return only valid JSON matching the described schema. Do not include include citation markers like [1], [2], 
+        Return only valid JSON matching the described schema. Do not include citation markers like [1], [2], 
 		or reference numbers in any field or any additional text or explanation.`;
 
 	// Prepare the API request payload
+	console.log('User Prompt', userPrompt.trim());
 	const payload = {
 		model: 'sonar-pro', // use the Sonar Pro model:contentReference[oaicite:0]{index=0}
 		messages: [
