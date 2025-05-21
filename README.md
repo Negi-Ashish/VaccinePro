@@ -1,4 +1,3 @@
-````markdown
 # VacciPro 🧬💉
 
 **VacciPro** is a smart **vaccine scheduler** that helps users understand what vaccines they might need based on their **age**, **medical history**, and **occupation**. Most people don’t have clarity on which vaccines are appropriate for them or the possible side effects — VacciPro fills that gap with personalized, reliable, and easy-to-understand information.
@@ -37,11 +36,11 @@
 ## ⚙️ Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Negi-Ashish/vacci-pro.git
    cd vacci-pro
    ```
-````
 
 2. Install dependencies:
 
