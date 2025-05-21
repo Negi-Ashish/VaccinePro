@@ -18,7 +18,7 @@
 - Integrated with **Perplexity Sonar API** to fetch vaccine data from trusted health sources
 - Displays vaccine recommendations in a clean table format
 - Download the schedule as a **PDF**
-- **Ad support** included (via sponsors)
+- **Ad support** included
 
 ---
 
