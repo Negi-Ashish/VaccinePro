@@ -8,6 +8,8 @@
 
 <!-- TODO: Add demo video or deployment link here -->
 
+https://youtu.be/U5GxTJ1023A?si=gbAvnS8BGMrbr9uf
+
 ---
 
 ## ✨ Features
